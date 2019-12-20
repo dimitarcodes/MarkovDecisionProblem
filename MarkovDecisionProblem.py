@@ -45,12 +45,12 @@ class MarkovDecisionProblem:
             'n': rewardsV[2]
         }
 
-        if predefinedFields and width >= 4 and height >= 3:
-            self.world[1][1] = 'o'
-            self.world[1][3] = 'n'
-            self.world[0][3] = 'r'
-            self.xPositionReward = 3
-            self.yPositionReward = 0
+
+        self.world[1][1] = 'o'
+        self.world[1][3] = 'n'
+        self.world[0][3] = 'r'
+        self.xPositionReward = 3
+        self.yPositionReward = 0
 
     def getHeight(self):
         return self.height

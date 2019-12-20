@@ -13,12 +13,14 @@ class ValueIteration():
         self.rewards = rewards
         self.height = self.mdp.height
         self.width = self.mdp.width
-        zeroarr = self.mdp.world.copy()
+
+        self.world = []
         for h in range(self.height):
-            for w in range(self.width):
-                zeroarr[h][w] = 0
-        self.world = zeroarr.copy()
-        self.policy = zeroarr.copy()
+            self.world.append([0] * self.width)
+        self.policy = []
+        for h in range(self.height):
+            self.policy.append([0] * self.width)
+
 
     def execute(self, iterations):
         if self.deterministic:
