@@ -5,8 +5,8 @@ def main():
     for i in range(15):
         score = 0
         mdp.reset()
-        score += mdp.performAction('d')
-        score += mdp.performAction('d')
+        score += mdp.performAction('u')
+        score += mdp.performAction('u')
         score += mdp.performAction('r')
         score += mdp.performAction('r')
         score += mdp.performAction('r')
