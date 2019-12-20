@@ -1,18 +1,16 @@
-from MarkovDecisionProblem import *
+import MarkovDecisionProblem
+import ValueIteration
 
 def main():
-    mdp = MarkovDecisionProblem()
-    for i in range(15):
-        score = 0
-        mdp.reset()
-        score += mdp.performAction('u')
-        score += mdp.performAction('u')
-        score += mdp.performAction('r')
-        score += mdp.performAction('r')
-        score += mdp.performAction('r')
-
-        print('BRUH MOMENT ', score)
-
+    vi = ValueIteration.ValueIteration(MarkovDecisionProblem.MarkovDecisionProblem())
+    vi.execute(100)
+    bruhmoment = ""
+    for height in range(vi.height):
+        for width in range (vi.width):
+            bruhmoment += vi.policy[height][width]
+            bruhmoment += " | "
+        bruhmoment += "\n"
+    print(bruhmoment)
 
 
 

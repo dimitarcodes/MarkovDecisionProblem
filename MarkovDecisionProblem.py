@@ -29,7 +29,7 @@ class MarkovDecisionProblem:
     terminated = False
 
     # Constructor
-    def __init__(self, width=4, height=3, predefinedFields=True, initialX = 0, initialY = 0):
+    def __init__(self, width=4, height=3, predefinedFields=True, initialX = 0, initialY = 0, rewardsV = [-0.04, 1, -1]):
         self.width = width
         self.height = height
         self.actionCounter = 0
@@ -38,6 +38,12 @@ class MarkovDecisionProblem:
             self.world.append(['e'] * self.width)
 
         self.score = 0
+
+        self.rewards = {
+            'e': rewardsV[0],
+            'r': rewardsV[1],
+            'n': rewardsV[2]
+        }
 
         if predefinedFields and width >= 4 and height >= 3:
             self.world[1][1] = 'o'
@@ -79,14 +85,15 @@ class MarkovDecisionProblem:
         self.terminated = False
         self.draw()
 
-    def getReward(self):
-        rewards = {
-            'e': -0.04,
-            'r': 1,
-            'n': -1
-        }
-        currentField = self.world[self.yPosition][self.xPosition]
-        return rewards.get(currentField)
+    def getReward(self, y = None, x = None):
+
+        if y is None:
+            y = self.yPosition
+        if x is None:
+            x = self.xPosition
+        currentField = self.world[y][x]
+
+        return self.rewards.get(currentField)
 
     def prevAction(self, action):
         pActions = {
@@ -120,7 +127,7 @@ class MarkovDecisionProblem:
             self.score += self.performAction(action)
             if self.xPosition == self.xPositionReward and self.yPosition == self.yPositionReward:
                 terminated = True
-        return score
+        return self.score
 
     def performAction(self, action):
         if self.deterministic:
