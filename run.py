@@ -3,6 +3,7 @@ import ValueIteration
 
 def main():
     vi = ValueIteration.ValueIteration(MarkovDecisionProblem.MarkovDecisionProblem())
+    #bruhmoment = vi.nextValue(2,2,'u')
     vi.execute(100)
     bruhmoment = ""
     for height in range(vi.height):

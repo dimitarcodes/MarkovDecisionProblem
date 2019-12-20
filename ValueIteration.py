@@ -6,18 +6,19 @@ class ValueIteration():
     def __init__(self, mdp=MarkovDecisionProblem.MarkovDecisionProblem(), deterministic=False, discount=0.9,
                  probs=[0.7, 0.2, 0.1, 0], rewards=[-0.04, 1, -1]):
         self.mdp = mdp
-        zeroarr = self.mdp.world.copy()
-        for h in zeroarr:
-            for w in h:
-                w = 0
-        self.world = zeroarr.copy()
-        self.policy = zeroarr.copy()
+
         self.discount = discount
         self.deterministic = deterministic
         self.probs = probs
         self.rewards = rewards
         self.height = self.mdp.height
         self.width = self.mdp.width
+        zeroarr = self.mdp.world.copy()
+        for h in range(self.height):
+            for w in range(self.width):
+                zeroarr[h][w] = 0
+        self.world = zeroarr.copy()
+        self.policy = zeroarr.copy()
 
     def execute(self, iterations):
         if self.deterministic:
@@ -72,12 +73,9 @@ class ValueIteration():
 
         #u
         qValues[0] = self.probs[0] * (
-                    self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height, width, 'u')) + \
-                self.probs[1] * (
-                    self.nextField(height - 1, width, 'l') + self.discount * self.nextValue(height, width, 'l'))+\
-                self.probs[1] * (
-                    self.nextField(height - 1, width, 'r') + self.discount * self.nextValue(height, width, 'r'))+\
-                self.probs[2] * (
+                    self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height, width, 'u')) + self.probs[1] * (
+                    self.nextField(height - 1, width, 'l') + self.discount * self.nextValue(height, width, 'l'))+self.probs[1] * (
+                    self.nextField(height - 1, width, 'r') + self.discount * self.nextValue(height, width, 'r'))+self.probs[2] * (
                     self.nextField(height - 1, width, 'd') + self.discount * self.nextValue(height, width, 'd'))
         #l
         qValues[2] = self.probs[1] * (
