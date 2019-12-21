@@ -13,7 +13,7 @@ array:
 [['e','e','e','e']    #[0][0...3]
  ['e','e','e','e']    #[1][0...3]
  ['e','o','e','e']]   #[2][0...3]
- 
+
 """
 
 
@@ -164,7 +164,7 @@ class MarkovDecisionProblem:
         if not self.terminated:
             action_reward = self.performAction(action)
             self.score += action_reward
-            if self.world[self.xPos][self.yPos] == 'r':  # if the new position contains reward, terminate mdp
+            if self.world[self.yPos][self.xPos] == 'r':  # if the new position contains reward, terminate mdp
                 self.terminated = True
         return action_reward
 
@@ -206,27 +206,35 @@ class MarkovDecisionProblem:
 
     # down action : [pos][x] -> [pos+1][x]
     def d(self):
+        # print('current y pos: ', self.yPos, ', current x pos: ', self.xPos)
         # make sure agent doesn't go out of bounds or run into obstacle
         if self.yPos < self.height - 1 and self.world[self.yPos + 1][self.xPos] != 'o':
             self.yPos += 1
+        # print('after move: y pos: ', self.yPos, ', after move x pos: ', self.xPos)
 
     # up action : [pos][x] -> [pos-1][x]
     def u(self):
+        # print('current y pos: ', self.yPos, ', current x pos: ', self.xPos)
         # make sure agent doesn't go out of bounds or run into obstacle
         if self.yPos > 0 and self.world[self.yPos - 1][self.xPos] != 'o':
             self.yPos -= 1
+        # print('after move: y pos: ', self.yPos, ', after move x pos: ', self.xPos)
 
     # right action : [y][pos] -> [y][pos+1]
     def r(self):
+        # print('current y pos: ', self.yPos, ', current x pos: ', self.xPos)
         # make sure agent doesn't go out of bounds or run into obstacle
         if self.xPos < self.width - 1 and self.world[self.yPos][self.xPos + 1] != 'o':
             self.xPos += 1
+        # print('after move: y pos: ', self.yPos, ', after move x pos: ', self.xPos)
 
     # left action : [y][pos] -> [y][pos-1]
     def l(self):
+        # print('current y pos: ', self.yPos, ', current x pos: ', self.xPos)
         # make sure agent doesn't go out of bounds or run into obstacle
         if self.xPos > 0 and self.world[self.yPos][self.xPos - 1] != 'o':
             self.xPos -= 1
+        # print('after move: y pos: ', self.yPos, ', after move x pos: ', self.xPos)
 
     # a printer used to visualize the current state of the mdp
     def draw(self):
@@ -235,18 +243,18 @@ class MarkovDecisionProblem:
             output += "|"
             for w in range(self.width):
                 # goes through all fields in world[h][w]
-                if h == self.yPos and w == self.xPos:       # if the agent is in the current cell
-                    output += "o|"                          # prints an oh (o)
+                if h == self.yPos and w == self.xPos:  # if the agent is in the current cell
+                    output += "o|"  # prints an oh (o)
                 else:
-                    if self.world[h][w] == 'o':             # if field contains an obstacle
-                        output += "||"                      # prints an extra wall (|)
+                    if self.world[h][w] == 'o':  # if field contains an obstacle
+                        output += "||"  # prints an extra wall (|)
                     else:
-                        if self.world[h][w] == 'r':         # if field contains a reward
-                            output += "$|"                  # prints a dollar sign ($)
+                        if self.world[h][w] == 'r':  # if field contains a reward
+                            output += "$|"  # prints a dollar sign ($)
                         else:
-                            if self.world[h][w] == 'n':     # if field contains a neg reward
-                                output += "X|"              # prints an (X)
+                            if self.world[h][w] == 'n':  # if field contains a neg reward
+                                output += "X|"  # prints an (X)
                             else:
-                                output += " |"              # prints an empty space ( ) if the field is empty
+                                output += " |"  # prints an empty space ( ) if the field is empty
             output += "\n"
         print(output)
