@@ -234,18 +234,19 @@ class MarkovDecisionProblem:
         for h in range(self.height):
             output += "|"
             for w in range(self.width):
-                if h == self.yPos and w == self.xPos:
-                    output += "o|"
+                # goes through all fields in world[h][w]
+                if h == self.yPos and w == self.xPos:       # if the agent is in the current cell
+                    output += "o|"                          # prints an oh (o)
                 else:
-                    if self.world[h][w] == 'o':
-                        output += "||"
+                    if self.world[h][w] == 'o':             # if field contains an obstacle
+                        output += "||"                      # prints an extra wall (|)
                     else:
-                        if self.world[h][w] == 'r':
-                            output += "*|"
+                        if self.world[h][w] == 'r':         # if field contains a reward
+                            output += "$|"                  # prints a dollar sign ($)
                         else:
-                            if self.world[h][w] == 'n':
-                                output += "X|"
+                            if self.world[h][w] == 'n':     # if field contains a neg reward
+                                output += "X|"              # prints an (X)
                             else:
-                                output += " |"
+                                output += " |"              # prints an empty space ( ) if the field is empty
             output += "\n"
         print(output)
