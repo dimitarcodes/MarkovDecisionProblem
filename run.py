@@ -2,11 +2,18 @@ import MarkovDecisionProblem
 import ValueIteration
 
 def main():
-    vi = ValueIteration.ValueIteration(MarkovDecisionProblem.MarkovDecisionProblem())
-    bruhmoment = vi.probs[0] * (
-                    vi.nextField(2 - 1, 0, 'u') + vi.discount * vi.nextValue(2, 0, 'u'))
-    # vi.execute(10)
-    # policy = vi.policy
+
+    mdp = MarkovDecisionProblem.MarkovDecisionProblem()
+
+    vi = ValueIteration.ValueIteration(mdp)
+    # vi.mdp.draw()
+    # print(vi.nextField(3,0,'d'))
+
+
+    # bruhmoment = vi.probs[0] * (
+    #                 vi.nextField(2 - 1, 0, 'u') + vi.discount * vi.nextValue(2, 0, 'u'))
+    vi.execute(10)
+  # policy = vi.policy
     # xpos = 0
     # ypos = 0
     #
@@ -21,7 +28,6 @@ def main():
     #         bruhmoment += vi.policy[height][width]
     #         bruhmoment += " | "
     #     bruhmoment += "\n"
-    print(bruhmoment)
 
 
 
