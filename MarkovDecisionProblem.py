@@ -35,7 +35,8 @@ class MarkovDecisionProblem:
         self.reward = {
             'e': self.rewards[0],  # e = empty field
             'r': self.rewards[1],  # r = reward
-            'n': self.rewards[2]  # n = neg reward
+            'n': self.rewards[2],  # n = neg reward
+            'o': -999
         }
 
         # convert given probabilities to a weighted probability distribution between 0 and 1
