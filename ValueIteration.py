@@ -1,56 +1,31 @@
 import MarkovDecisionProblem
 
-
 class ValueIteration():
 
-    def __init__(self, mdp=MarkovDecisionProblem.MarkovDecisionProblem(), deterministic=False, discount=0.9,
-                 prob=None, rewards=None):
-
-        if prob is None:
-            prob = [0.7, 0.2, 0.1, 0]
-
-        if rewards is None:
-            rewards = [-0.04, 1, -1]
-
+    def __init__(self, mdp=MarkovDecisionProblem.MarkovDecisionProblem(), deterministic=False, discount=0.9, probs=[0.7, 0.2, 0.1, 0], rewards=[-0.04, 1, -1]):
         self.mdp = mdp
-        if deterministic:
-            mdp.setDeterministic()
-        else:
-            mdp.setStochastic()
-
         self.discount = discount
-        self.prob = prob
+        self.deterministic = deterministic
+        self.probs = probs
         self.rewards = rewards
         self.height = self.mdp.height
         self.width = self.mdp.width
 
-        self.world = [[mdp.getReward(h, w) for w in range(self.width)] for h in range(self.height)]
-
+        self.world = []
+        for h in range(self.height):
+            self.world.append([0] * self.width)
         self.policy = []
         for h in range(self.height):
-            self.policy.append([0] * self.width)
+            self.policy.append(['n'] * self.width)
 
     def execute(self, iterations):
+        if self.deterministic:
+            self.mdp.setDeterministic()
         for i in range(iterations):
             self.updateStates()
         self.updateAction()
 
-    def updateAction(self):
-        for height in range(self.height):
-            for width in range(self.width):
-                up = self.nextValue(height, width, 'u')
-                down = self.nextValue(height, width, 'd')
-                left = self.nextValue(height, width, 'l')
-                right = self.nextValue(height, width, 'r')
-                best = max(up, down, left, right)
-                if best == up:
-                    self.policy[height][width] = 'u'
-                elif best == down:
-                    self.policy[height][width] = 'd'
-                elif best == left:
-                    self.policy[height][width] = 'l'
-                elif best == right:
-                    self.policy[height][width] = 'r'
+
 
     def updateStates(self):
         newWorld = self.world.copy()
@@ -80,74 +55,52 @@ class ValueIteration():
         qValues = [0, 0, 0, 0]
 
         # u
-        qValues[0] = self.prob[0] * (
-                self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height, width, 'u'))
-        + \
-            self.prob[1] * (
-                self.nextField(height - 1, width, 'l') + self.discount * self.nextValue(height, width,'l')) + self.prob[
-            1] * (
-                self.nextField(height - 1, width, 'r') + self.discount * self.nextValue(height, width,'r')) + self.prob[
-            2] * (
-                self.nextField(height - 1, width, 'd') + self.discount * self.nextValue(height, width,'d'))
+        qValues[0] = self.probs[0] * (self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height-1, width, 'u')) + \
+                     self.probs[1] * (self.nextField(height, width - 1 ,'l') + self.discount * self.nextValue(height, width - 1 ,'l')) + \
+                     self.probs[1] * (self.nextField(height, width + 1, 'r') + self.discount * self.nextValue(height, width + 1, 'r')) + \
+                     self.probs[2] * (self.nextField(height+1, width, 'd') + self.discount * self.nextValue(height+1, width, 'd'))
         # l
-        qValues[2] = self.prob[1] * (
-                self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height, width, 'u')) + \
-                     self.prob[0] * (
-                             self.nextField(height - 1, width, 'l') + self.discount * self.nextValue(height, width,
-                                                                                                     'l')) + \
-                     self.prob[2] * (
-                             self.nextField(height - 1, width, 'r') + self.discount * self.nextValue(height, width,
-                                                                                                     'r')) + \
-                     self.prob[1] * (
-                             self.nextField(height - 1, width, 'd') + self.discount * self.nextValue(height, width,
-                                                                                                     'd'))
+        qValues[2] = self.probs[1] * (self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height-1, width, 'u')) + \
+                     self.probs[0] * (self.nextField(height, width - 1 ,'l') + self.discount * self.nextValue(height, width - 1 ,'l')) + \
+                     self.probs[1] * (self.nextField(height + 1, width, 'd') + self.discount * self.nextValue(height + 1, width, 'd')) + \
+                     self.probs[2] * (self.nextField(height, width + 1, 'r') + self.discount * self.nextValue(height, width + 1, 'r'))
+
         # r
-        qValues[3] = self.prob[1] * (
-                self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height, width, 'u')) + \
-                     self.prob[2] * (
-                             self.nextField(height - 1, width, 'l') + self.discount * self.nextValue(height, width,
-                                                                                                     'l')) + \
-                     self.prob[0] * (
-                             self.nextField(height - 1, width, 'r') + self.discount * self.nextValue(height, width,
-                                                                                                     'r')) + \
-                     self.prob[1] * (
-                             self.nextField(height - 1, width, 'd') + self.discount * self.nextValue(height, width,
-                                                                                                     'd'))
+        qValues[3] = self.probs[1] * (self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height - 1, width, 'u')) + \
+                     self.probs[0] * (self.nextField(height, width + 1, 'r') + self.discount * self.nextValue(height, width + 1, 'r')) + \
+                     self.probs[1] * (self.nextField(height+1, width, 'd') + self.discount * self.nextValue(height + 1, width, 'd')) +\
+                     self.probs[2] * (self.nextField(height, width - 1 ,'l') + self.discount * self.nextValue(height, width - 1 ,'l'))
         # d
-        qValues[1] = self.prob[2] * (
-                self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height, width, 'u')) + \
-                     self.prob[1] * (
-                             self.nextField(height - 1, width, 'l') + self.discount * self.nextValue(height, width,
-                                                                                                     'l')) + \
-                     self.prob[1] * (
-                             self.nextField(height - 1, width, 'r') + self.discount * self.nextValue(height, width,
-                                                                                                     'r')) + \
-                     self.prob[0] * (
-                             self.nextField(height - 1, width, 'd') + self.discount * self.nextValue(height, width,
-                                                                                                     'd'))
+        qValues[1] = self.probs[2] * (self.nextField(height - 1, width, 'u') + self.discount * self.nextValue(height - 1, width, 'u')) + \
+                     self.probs[1] * (self.nextField(height, width - 1, 'l') + self.discount * self.nextValue(height, width - 1, 'l')) + \
+                     self.probs[1] * (self.nextField(height, width + 1, 'r') + self.discount * self.nextValue(height, width + 1, 'r')) + \
+                     self.probs[0] * (self.nextField(height + 1, width, 'd') + self.discount * self.nextValue(height+1, width, 'd'))
 
         return qValues
 
-    def nextField(self, height, width, action):
-        if width < 0 or width > self.width or height < 0 or height > self.height:
-            if action == 'u':
-                val = self.mdp.getReward(height + 1, width)
-                return val
-            elif action == 'd':
-                val = self.mdp.getReward(height - 1, width)
-                return val
-            elif action == 'l':
-                val = self.mdp.getReward(height, width + 1)
-                return val
-            elif action == 'r':
-                val = self.mdp.getReward(height, width - 1)
-                return val
-        else:
-            val = self.mdp.getReward(height, width)
-            return val
+
+
+    def updateAction(self):
+        for height in range(self.height):
+            for width in range(self.width):
+                up = self.nextValue(height, width, 'u')
+                down = self.nextValue(height, width, 'd')
+                left = self.nextValue(height, width, 'l')
+                right = self.nextValue(height, width, 'r')
+                best = max(up, down, left, right)
+                if best == up:
+                    self.policy[height][width] = 'u'
+                elif best == down:
+                    self.policy[height][width] = 'd'
+                elif best == left:
+                    self.policy[height][width] = 'l'
+                elif best == right:
+                    self.policy[height][width] = 'r'
 
     def nextValue(self, height, width, action):
-        if width < 0 or width > self.width or height < 0 or height > self.height:
+        if self.mdp.isAccessible(height, width):
+            return self.world[height][width]
+        else:
             if action == 'u':
                 return self.world[height + 1][width]
             elif action == 'd':
@@ -156,8 +109,21 @@ class ValueIteration():
                 return self.world[height][width + 1]
             elif action == 'r':
                 return self.world[height][width - 1]
+
+
+    def nextField(self, height, width, action):
+        if self.mdp.isAccessible(height, width):
+            return self.mdp.getReward(height, width)
         else:
-            return self.world[height][width]
+            if action == 'u':
+                return self.mdp.getReward(height + 1, width)
+            elif action == 'd':
+                return self.mdp.getReward(height - 1, width)
+            elif action == 'l':
+                return self.mdp.getReward(height, width + 1)
+            elif action == 'r':
+                return self.mdp.getReward(height, width - 1)
+
 
     # statefield = reward of next state, result of (w, h, action), using rewards[]
     # statevalue = returns the value of the next state (according to action), returns current state if next value is
