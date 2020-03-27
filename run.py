@@ -6,10 +6,8 @@ def main():
     mdp = MarkovDecisionProblem.MarkovDecisionProblem()
 
     vi = ValueIteration.ValueIteration(mdp)
-    vi.mdp.draw()
-    # print(vi.nextField(3,0,'d'))
-
-    vi.execute(10)
+    print('\n')
+    vi.execute(5)
 
 
 if __name__ == '__main__':
