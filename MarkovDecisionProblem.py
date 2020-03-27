@@ -119,15 +119,15 @@ class MarkovDecisionProblem:
 
     # set a particular field to be an obstacle
     def setObstacle(self, ypos, xpos):
-        self.setField('o', ypos, xpos)
+        self.setField(ypos, xpos, 'o')
 
     # set a particular field to be a reward
     def setReward(self, ypos, xpos):
-        self.setField('r', ypos, xpos)
+        self.setField(ypos, xpos, 'r')
 
     # set a particular field to be a neg reward
     def setNegReward(self, ypos, xpos):
-        self.setField('n', ypos, xpos)
+        self.setField(ypos, xpos, 'n')
 
     # make the mdp deterministic (each given action will be executed as expected)
     def setDeterministic(self):

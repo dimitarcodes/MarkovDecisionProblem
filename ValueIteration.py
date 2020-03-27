@@ -1,5 +1,7 @@
 import MarkovDecisionProblem
 
+import copy
+
 class ValueIteration():
 
     def __init__(self, mdp=MarkovDecisionProblem.MarkovDecisionProblem(), deterministic=False, discount=0.9, probs=[0.7, 0.2, 0.1, 0], rewards=[-0.04, 1, -1]):
@@ -18,17 +20,52 @@ class ValueIteration():
         for h in range(self.height):
             self.policy.append(['n'] * self.width)
 
+        for h in range(self.height):
+            for w in range (self.width):
+                if self.mdp.world[h][w] == 'o':
+                    self.policy[h][w] = '|'
+                elif self.mdp.world[h][w] == 'r':
+                    self.policy[h][w] = '$'
+                elif self.mdp.world[h][w] == 'n':
+                    self.policy[h][w] = 'X'
+
     def execute(self, iterations):
         if self.deterministic:
             self.mdp.setDeterministic()
+        self.printConditions()
+        print('Start state:')
+        self.mdp.draw()
         for i in range(iterations):
             self.updateStates()
-        self.updateAction()
+        self.drawPolicy(self.policy, iterations)
+        #self.updateAction()
 
+    def printConditions(self):
+        if self.deterministic:
+            print('Deterministic mdp')
+        else:
+            print('Stochastic mdp with probability distribution: \n[plannedStep, sideStep, backStep, noStep]: ', self.probs)
+        print('discount: ', self.discount)
+        print('step reward: ', self.rewards[0])
+        print('poz reward: ', self.rewards[1])
+        print('neg reward: ', self.rewards[2],'\n')
 
+    def drawPolicy(self, policy, iterations):
+        output = ""
+        output+='Optimal policy after '
+        output+=str(iterations)
+        output+=' iterations:\n'
+        for height in range(0, len(policy)):
+            output+='|'
+            for width in range (0,len(policy[height])):
+                output+=policy[height][width]
+                output+='|'
+            output+='\n'
+        print(output)
+        return output
 
     def updateStates(self):
-        newWorld = self.world.copy()
+        newWorld = copy.deepcopy(self.world)
         for height in range(self.height):
             for width in range(self.width):
                 if self.mdp.world[height][width] == 'e':
@@ -81,6 +118,12 @@ class ValueIteration():
 
 
     def updateAction(self):
+        """
+        DANGEROUS FUNCTION, IT FUCKS UP POLICY, DO NOT USE!
+        i do not remember why i implemented it but code runs fine without it
+        :return:
+        """
+
         for height in range(self.height):
             for width in range(self.width):
                 up = self.nextValue(height, width, 'u')
@@ -96,6 +139,7 @@ class ValueIteration():
                     self.policy[height][width] = 'l'
                 elif best == right:
                     self.policy[height][width] = 'r'
+
 
     def nextValue(self, height, width, action):
         if self.mdp.isAccessible(height, width):
