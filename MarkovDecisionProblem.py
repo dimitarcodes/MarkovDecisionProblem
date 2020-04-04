@@ -180,6 +180,8 @@ class MarkovDecisionProblem:
         if not self.terminated:
             action_reward = self.performAction(action)
             self.score += action_reward
+            if self.world[self.yPos][self.xPos] == 'n':
+                self.reset()
             if self.world[self.yPos][self.xPos] == 'r':  # if the new position contains reward, terminate mdp
                 self.terminated = True
         return action_reward
