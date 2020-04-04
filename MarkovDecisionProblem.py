@@ -100,6 +100,12 @@ class MarkovDecisionProblem:
         self.score = 0  # set score to 0
         self.terminated = False  # problem will execute new actions until terminated = True
 
+    def endGame(self):
+        if self.world[self.yPos][self.xPos] == 'r':
+            return True
+        else:
+            return False
+
     #check if a particular field can be accessed by the agent
     def isAccessible(self, height, width):
         if width < 0 or width > self.width - 1 or height < 0 or height > self.height - 1:
