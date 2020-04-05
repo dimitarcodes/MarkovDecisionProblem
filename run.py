@@ -13,6 +13,7 @@ def main():
 
     vi = ValueIteration.ValueIteration(mdp)
     ql = QLearning.QLearning(mdp)
+    
     ql.qlearning(iterations=15, exploration=0.2)
 
 if __name__ == '__main__':
