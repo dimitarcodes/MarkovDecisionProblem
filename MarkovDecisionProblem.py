@@ -1,6 +1,6 @@
 """
 @Author: Dimitar 'mechachki' Dimitrov - s1018291
-@Author: Carla Schindler - s1017233
+@Author: Carla Schindler - s1017233 
 
 A class representing a Markov Decision Problem
 
