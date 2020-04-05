@@ -1,3 +1,7 @@
+"""
+@Author: Dimitar 'mechachki' Dimitrov - s1018291
+@Author: Carla Schindler - s1017233
+"""
 import MarkovDecisionProblem
 
 import copy
@@ -20,7 +24,7 @@ class QLearning():
             self.Q.append(currentRow)
 
 
-    def qlearning(self, iterations, discount = 0.5, learnrate = 0.8, exploitation = 0.2, deterministic = False):
+    def qlearning(self, iterations, discount = 0.5, learnrate = 0.8, exploration = 0.2, deterministic = False):
         if deterministic:
             self.mdp.setDeterministic()
 
@@ -34,7 +38,7 @@ class QLearning():
 
                 #decide whether to go to best known state (exploitation) or to a random state (exploration)
                 prob = random.random()
-                if prob < exploitation:
+                if prob < (1-exploration):
                     action = self.getBestPolicy(self.mdp.yPos, self.mdp.xPos)
                 else:
                     action = random.choice(self.actions)

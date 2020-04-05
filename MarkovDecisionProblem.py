@@ -1,7 +1,6 @@
-import random
-
 """
-@Author: Dimitar Dimitrov, Carla Schindler
+@Author: Dimitar 'mechachki' Dimitrov - s1018291
+@Author: Carla Schindler - s1017233
 
 A class representing a Markov Decision Problem
 
@@ -15,7 +14,7 @@ array:
  ['e','o','e','e']]   #[2][0...3]
 
 """
-
+import random
 
 class MarkovDecisionProblem:
 

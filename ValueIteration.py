@@ -1,5 +1,9 @@
-import MarkovDecisionProblem
+"""
+@Author: Dimitar 'mechachki' Dimitrov - s1018291
+@Author: Carla Schindler - s1017233
+"""
 
+import MarkovDecisionProblem
 import copy
 
 class ValueIteration():
