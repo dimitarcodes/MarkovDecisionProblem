@@ -3,7 +3,6 @@
 @Author: Carla Schindler - s1017233
 """
 import MarkovDecisionProblem
-
 import copy
 import random
 
@@ -83,4 +82,3 @@ class QLearning():
             best_action = max(policyDict, key=policyDict.get)
             print('best action: ', best_action)
             return best_action
-

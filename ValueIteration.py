@@ -171,8 +171,3 @@ class ValueIteration():
                 return self.mdp.getReward(height, width + 1)
             elif action == 'r':
                 return self.mdp.getReward(height, width - 1)
-
-
-    # statefield = reward of next state, result of (w, h, action), using rewards[]
-    # statevalue = returns the value of the next state (according to action), returns current state if next value is
-    # out of bounds cell, or if current state is goal
